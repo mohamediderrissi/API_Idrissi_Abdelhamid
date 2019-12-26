@@ -1,12 +1,14 @@
-package com.emse.spring.faircorp.model;
+package faircorp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.emse.spring.faircorp.model.Room;
+import com.emse.spring.faircorp.model.Status;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "NOISE")
-public class Noise {
+@Table(name = "LIGHT")
+public class Light {
 
     @Id
     @GeneratedValue
@@ -18,18 +20,22 @@ public class Noise {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToOne
-    @JoinColumn(name = "room_Id" , referencedColumnName = "roomId")
-    @JsonIgnore
-    Room room;
+    @Column
+    private Integer color;
 
-    public Noise() {
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "room_Id" , referencedColumnName = "id")
+    com.emse.spring.faircorp.model.Room room;
+
+    public Light() {
     }
 
-    public Noise(Integer level, Status status,Room room) {
+    public Light(Integer level, Status status, com.emse.spring.faircorp.model.Room room, Integer color) {
         this.level = level;
         this.status = status;
         this.room = room;
+        this.color = color;
     }
 
     public Long getId() {
@@ -56,11 +62,20 @@ public class Noise {
         this.status = status;
     }
 
-    public Room getRoom() {
+    public Integer getColor() {
+        return color;
+    }
+
+    public void setColor(Integer color) {
+        this.color = color;
+    }
+
+    public com.emse.spring.faircorp.model.Room getRoom() {
         return room;
     }
 
     public void setRoom(Room room) {
         this.room = room;
     }
+
 }

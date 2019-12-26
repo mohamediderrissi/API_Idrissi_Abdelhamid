@@ -1,5 +1,6 @@
-package com.emse.spring.faircorp.model;
+package faircorp.model;
 
+import com.emse.spring.faircorp.model.Light;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -30,7 +31,7 @@ import java.util.List;
 
     }
 
-    public Room(String name, String floor, List<Light> lights, Building building) {
+    public Room(String name, String floor, List<Light> lights,Building building) {
         this.name = name;
         this.floor = floor;
         this.lights = lights;

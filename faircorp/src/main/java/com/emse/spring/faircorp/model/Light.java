@@ -1,7 +1,6 @@
 package com.emse.spring.faircorp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 
@@ -19,18 +18,22 @@ public class Light {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToOne
-    @JoinColumn(name = "room_Id" , referencedColumnName = "roomId")
-    @JsonIgnore
+    @Column
+    private Integer color;
+
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "room_Id" , referencedColumnName = "id")
     Room room;
 
     public Light() {
     }
 
-    public Light(Integer level, Status status,Room room) {
+    public Light(Integer level, Status status, Room room, Integer color) {
         this.level = level;
         this.status = status;
         this.room = room;
+        this.color = color;
     }
 
     public Long getId() {
@@ -57,6 +60,14 @@ public class Light {
         this.status = status;
     }
 
+    public Integer getColor() {
+        return color;
+    }
+
+    public void setColor(Integer color) {
+        this.color = color;
+    }
+
     public Room getRoom() {
         return room;
     }
@@ -64,4 +75,5 @@ public class Light {
     public void setRoom(Room room) {
         this.room = room;
     }
+
 }

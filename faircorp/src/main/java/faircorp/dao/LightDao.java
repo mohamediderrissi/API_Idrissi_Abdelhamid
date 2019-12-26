@@ -1,4 +1,4 @@
-package com.emse.spring.faircorp.dao;
+package faircorp.dao;
 
 import com.emse.spring.faircorp.model.Light;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package com.emse.spring.faircorp.controller;
+package faircorp.controller;
 
 
 import com.emse.spring.faircorp.dao.BuildingDao;
