@@ -13,12 +13,13 @@ public class MqttManager {
     String serverURI = "tcp://max.isasecret.com:1723";
     String  clientId = "999888";
     int qualityOfService = 2;
-    public static String  TOPIC = "/test/france/iot";
     private static MqttConnectOptions options;
+    private static MqttManager mqttManager;
 
 
-    public void publish() throws MqttException
+    public void publishSwitchOn(String lightId) throws MqttException
     {
+        String  TOPIC = "idrissi/switchOn";
         MqttClient client = new MqttClient(serverURI,clientId,new MemoryPersistence());
 
         try{
@@ -26,10 +27,32 @@ public class MqttManager {
             System.out.println("Client Connected ! ");
             MqttMessage msg = new MqttMessage();
             msg.setQos(qualityOfService);
-            msg.setPayload("Hello World ! we are testing our MqttClient".getBytes());
+            msg.setPayload(lightId.getBytes());
             System.out.println("Client is Publishing ....");
             client.publish(TOPIC,msg);
-            System.out.println("Client is Published !");
+            System.out.println("Client Published !");
+
+        }
+        catch (MqttException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+    public void publishSwitchOff(String lightId) throws MqttException
+    {
+        String  TOPIC = "idrissi/switchOff";
+        MqttClient client = new MqttClient(serverURI,clientId,new MemoryPersistence());
+
+        try{
+            if(!client.isConnected()) client.connect(MqttManager.setOptions());
+            System.out.println("Client Connected ! ");
+            MqttMessage msg = new MqttMessage();
+            msg.setQos(qualityOfService);
+            msg.setPayload(lightId.getBytes());
+            System.out.println("Client is Publishing ....");
+            client.publish(TOPIC,msg);
+            System.out.println("Client Published !");
 
         }
         catch (MqttException e)
@@ -39,13 +62,13 @@ public class MqttManager {
 
     }
 
-    public void subscribe() throws MqttException
+ /*   public void subscribe() throws MqttException
     {
         MqttClient client = new MqttClient(serverURI,"898989");
         /**
          * We should First define the required methods for the client, before connecting it.
          */
-        client.setCallback(new MqttCallback() {
+ /*       client.setCallback(new MqttCallback() {
             @Override
             public void connectionLost(Throwable cause) {
                 System.out.println("the client lost the connection to the broker");
@@ -74,6 +97,8 @@ public class MqttManager {
         }
     }
 
+  */
+
     private static MqttConnectOptions setOptions()
     {
         if (options == null)
@@ -82,6 +107,15 @@ public class MqttManager {
             options.setPassword("Y@_oK2".toCharArray());
         }
         return options;
+    }
+
+    public static MqttManager  getInstance()
+    {
+        if(mqttManager==null)
+        {
+            mqttManager = new MqttManager();
+        }
+        return mqttManager;
     }
 
 }

@@ -4,6 +4,7 @@ import com.emse.spring.faircorp.dao.*;
 import com.emse.spring.faircorp.dto.LightDto;
 import com.emse.spring.faircorp.model.Light;
 import com.emse.spring.faircorp.model.Status;
+import com.emse.spring.faircorp.mqtt.MqttManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -41,12 +42,31 @@ public class LightController {
    @PutMapping(path = "/{id}/switchOn")
     public LightDto switchOn(@PathVariable Long id) {
         Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
-        light.setStatus(Status.ON);
+       /**
+        * We Publish a SwitchOn  and In the Payload we inject the Light ID
+        * The MqttManager use Singleton Pattern
+        */
+       try{
+           MqttManager.getInstance().publishSwitchOn(id.toString());
+       }catch (Exception e)
+       {
+           e.printStackTrace();
+       }
+
+       light.setStatus(Status.ON);
         return new LightDto(light);
     }
     @PutMapping(path = "/{id}/switchOff")
     public LightDto switchOff(@PathVariable Long id) {
         Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
+        try{
+            MqttManager.getInstance().publishSwitchOff(id.toString());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
         light.setStatus(Status.OFF);
         return new LightDto(light);
     }
