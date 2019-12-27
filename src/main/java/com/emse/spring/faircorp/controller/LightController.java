@@ -47,7 +47,7 @@ public class LightController {
         * The MqttManager use Singleton Pattern
         */
        try{
-           MqttManager.getInstance().publishSwitchOn(id.toString());
+           MqttManager.getInstance().publishSwitchOn(String.valueOf(id));
        }catch (Exception e)
        {
            e.printStackTrace();
@@ -60,7 +60,7 @@ public class LightController {
     public LightDto switchOff(@PathVariable Long id) {
         Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
         try{
-            MqttManager.getInstance().publishSwitchOff(id.toString());
+            MqttManager.getInstance().publishSwitchOff(String.valueOf(id));
         }
         catch (Exception e)
         {
