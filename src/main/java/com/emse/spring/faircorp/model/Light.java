@@ -13,13 +13,13 @@ public class Light {
     private Long id;
 
     @Column(nullable = false)
-    private Integer level;
+    private Integer hue;
+
+    private Integer brightness;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column
-    private Integer color;
 
     @JsonBackReference
     @ManyToOne
@@ -29,11 +29,12 @@ public class Light {
     public Light() {
     }
 
-    public Light(Integer level, Status status, Room room, Integer color) {
-        this.level = level;
+    public Light(Long id,Integer brightness, Integer hue , Status status,Room room) {
+        this.id = id;
+        this.brightness = brightness;
+        this.hue = hue;
         this.status = status;
         this.room = room;
-        this.color = color;
     }
 
     public Long getId() {
@@ -44,12 +45,20 @@ public class Light {
         this.id = id;
     }
 
-    public Integer getLevel() {
-        return level;
+    public Integer getHue() {
+        return hue;
     }
 
-    public void setLevel(Integer level) {
-        this.level = level;
+    public void setHue(Integer hue) {
+        this.hue = hue;
+    }
+
+    public Integer getBrightness() {
+        return brightness;
+    }
+
+    public void setBrightness(Integer brightness) {
+        this.brightness = brightness;
     }
 
     public Status getStatus() {
@@ -60,13 +69,6 @@ public class Light {
         this.status = status;
     }
 
-    public Integer getColor() {
-        return color;
-    }
-
-    public void setColor(Integer color) {
-        this.color = color;
-    }
 
     public Room getRoom() {
         return room;

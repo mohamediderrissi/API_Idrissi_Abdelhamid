@@ -32,7 +32,7 @@ class LightDaoCustomImplTest {
         Assertions.assertThat(lightDao.findLightsByRoomId(-10L))
                 .hasSize(2)
                 .extracting("id","level","status")
-                .contains(Tuple.tuple(-1L, 8, Status.ON),Tuple.tuple(-2L, 0, Status.OFF));
+                .contains(Tuple.tuple(-1L,300,100, Status.ON),Tuple.tuple(-2L, 200,40, Status.OFF));
     }
 
 }
