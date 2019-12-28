@@ -1,6 +1,7 @@
 package com.emse.spring.faircorp.controller;
 
-import com.emse.spring.faircorp.dao.*;
+import com.emse.spring.faircorp.dao.LightDao;
+import com.emse.spring.faircorp.dao.RoomDao;
 import com.emse.spring.faircorp.dto.LightDto;
 import com.emse.spring.faircorp.model.Light;
 import com.emse.spring.faircorp.model.Status;
@@ -71,6 +72,11 @@ public class LightController {
         return new LightDto(light);
     }
 
+    /**
+     * For The create method :
+     *      If the id exist already --------> Update : we should publish an update
+     *      else : create
+     */
     @PostMapping
     public LightDto create(@RequestBody LightDto dto) {
         Light light = null;
@@ -81,6 +87,19 @@ public class LightController {
         if (light == null) {
             light = lightDao.save(new Light(dto.getId(),dto.getBrightness(), dto.getHue(), dto.getStatus(),roomDao.getOne(dto.getRoomId())));
         } else {
+            /**
+             * We publish to update the light's brightness and/or Hue
+             * We send the required information in a String format with  the following pattern :
+             *  " id \n value_brightness \n value_hue \n Light_Status"
+             */
+            String message = ""+dto.getId()  +"\n" + dto.getBrightness() +"\n" + dto.getHue()+"\n" + dto.getStatus();
+            try {
+                MqttManager.getInstance().publishUpdateLightBrightnessOrHue(message);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
             light.setStatus(dto.getStatus());
             light.setBrightness(dto.getBrightness());
             light.setHue(dto.getHue());
@@ -94,6 +113,5 @@ public class LightController {
     public void delete(@PathVariable Long id) {
         lightDao.deleteById(id);
     }
-
 
 }

@@ -62,6 +62,29 @@ public class MqttManager {
 
     }
 
+    public void publishUpdateLightBrightnessOrHue(String str) throws MqttException
+    {
+        String  TOPIC = "idrissi/update";
+        MqttClient client = new MqttClient(serverURI,clientId,new MemoryPersistence());
+
+        try{
+            if(!client.isConnected()) client.connect(MqttManager.setOptions());
+            System.out.println("Client Connected ! ");
+            MqttMessage msg = new MqttMessage();
+            msg.setQos(qualityOfService);
+            msg.setPayload(str.getBytes());
+            System.out.println("Client is Publishing ....");
+            client.publish(TOPIC,msg);
+            System.out.println("Client Published !");
+
+        }
+        catch (MqttException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
  /*   public void subscribe() throws MqttException
     {
         MqttClient client = new MqttClient(serverURI,"898989");
