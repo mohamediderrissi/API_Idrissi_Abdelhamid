@@ -100,7 +100,7 @@ public class LightController {
             {
                 e.printStackTrace();
             }
-            light.setStatus(dto.getStatus());
+            light.setStatus(Status.ON);
             light.setBrightness(dto.getBrightness());
             light.setHue(dto.getHue());
             lightDao.save(light);
