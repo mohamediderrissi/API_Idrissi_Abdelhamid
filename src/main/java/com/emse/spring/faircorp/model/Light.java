@@ -9,7 +9,6 @@ import javax.persistence.*;
 public class Light {
 
     @Id
-    @GeneratedValue
     private Long id;
 
     @Column(nullable = false)
